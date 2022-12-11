@@ -16,3 +16,15 @@ C: Cold: Cold endurance.
 I: Immunity: Immunity from plant based deceases.
 D: Durability: Higher = Better protection from bug infectation, lesser loss during harvest.
 0: Empty: No effects.
+
+Plant colors:
+White: Healthy.
+Yellow: Getting dry.
+Red: Dying.
+Green: Ready to harvest.
+
+
+
+[░░] : Plowed
+[  ] : Soil
+[░░] : Yellow -> Fertilizer added

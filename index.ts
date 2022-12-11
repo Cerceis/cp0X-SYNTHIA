@@ -10,11 +10,13 @@ import { Delay, Generate } from "cerceis-lib";
 		console.log("[1] Shop  [2] Info  [3] System")
 		console.log("---------------------------------------");
 		console.log(`
-			[AT][AP][AP][AP][AP]
-			[BG][AP][AP][AP][AP]
-			[AP][AP][AP][AP][AP]
-			[AP][AP][AP][AP][AP]
-			[AP][AP][AP][AP][AP]
+			 0   1   2   3   4 
+
+		0	[AT][AP][AP][AP][AP]
+		1	[BG][AP][AP][AP][AP]
+		2	[░░][░░][AP][AP][AP]
+		3	[░░][░░][AP][AP][AP]
+		4	[AP][AP][AP][AP][AP]
 		`)
 		await Delay(100);
 	}	
