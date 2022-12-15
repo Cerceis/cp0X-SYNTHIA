@@ -18,11 +18,11 @@ D: Durability: Higher = Better protection from bug infectation, lesser loss duri
 0: Empty: No effects.
 
 Plant colors:
-White: Healthy.
+Blue: Watered.
+White: Normal.
 Yellow: Getting dry.
 Red: Dying.
 Green: Ready to harvest.
-
 
 
 [░░] : Plowed
