@@ -35,7 +35,8 @@ money           : Show your current money.
  
 === Garden ===
 plow [row][col] : Plow your garden. Ex) plow 2 2
-plow hire help  : Spend 1000 G to hire a helper to plow your entire garden.
+plow hire help  : Spend 100 G PER plot to hire a helper to plow
+                  your entire garden. (Current total ${comGarden.size * comGarden.size * 100} G)
 
 	`,
 	destoryOnNextCycle: true,
