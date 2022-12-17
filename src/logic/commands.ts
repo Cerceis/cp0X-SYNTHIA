@@ -9,6 +9,7 @@ import {
 export const applyCommands = (input: string[]) => {
 	if(!input || input.length <= 0) return;
 
+	// TODO: There's a bug here.
 	if(input[0] === "?"){
 		VisualComponent.show(["commandHelper"]);
 	}
