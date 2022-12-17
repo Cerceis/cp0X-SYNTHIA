@@ -1,14 +1,7 @@
-import { Generate, Delay } from "cerceis-lib";
-import { Garden } from "./visualComponents/components/garden";
+import { Delay } from "cerceis-lib";
 import { createInterface } from "readline";
-import { commandListString } from "../data/commands";
 import { VisualComponent } from "./visualComponents/visualComponent";
-
-const myGarden = new Garden({
-	label: "garden",
-	name: "Eternal Garden",
-	size: 5,
-});
+import { applyCommands } from "./commands";
 
 const rl = createInterface({input: process.stdin, output: process.stdout});
 
@@ -16,11 +9,9 @@ export class Game{
     static _awaitingCmd: boolean = false;
     static _input: string[] = [];
 
-    private _id: string;
     private _refreshRate: number;
     
     constructor(refreshRate: number = 100){
-        this._id = Generate.objectId();
         this._refreshRate = refreshRate;
     }
 
@@ -31,11 +22,7 @@ export class Game{
     public async startRenderingCycle(){
         const _renderFunc = async() => {
 			console.clear()
-            console.log("WELCOME, I am SYNTHIA, your farm assistant.");
-            console.log("---------------------------------------");
-			VisualComponent.renderAll();
-            console.log("---------------------------------------");
-			
+			VisualComponent.render();	
             Game._awaitingCmd = true;
             if(Game._awaitingCmd){
                 rl.question(`[help:?]: `, (c) => {
@@ -56,21 +43,3 @@ export class Game{
     }
 }
 
-
-const applyCommands = (input: string[]) => {
-	if(input && input.length > 0){
-		if(input[0] === "?"){
-			new VisualComponent({
-				label: "commandHelper",
-				text: () => commandListString,
-				destoryOnNextCycle: true,
-			});
-			Game.clearGameInput();
-		}
-		if(input[0] === "plow" && !isNaN(Number(input[1])) && !isNaN(Number(input[2]))){
-			myGarden.plow(Number(input[1]), Number(input[2]));
-			Game.clearGameInput();
-		}
-	}
-	
-}

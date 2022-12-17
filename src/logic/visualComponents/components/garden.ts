@@ -16,6 +16,9 @@ export interface GardenVisualComponentContructorOptions extends VisualComponentC
 export class Garden extends VisualComponent{
     private _grid: GardenPlot[][] = [];
     private _name: string;
+	private _size: number;
+	get size(): number { return this._size};
+	get name(){return this._name};
     
     constructor(options: GardenVisualComponentContructorOptions){
 		super(options);
@@ -31,6 +34,7 @@ export class Garden extends VisualComponent{
             }
             this._grid.push(tmpRow);
         }
+		this._size = options.size;
 		this.text = this._gardenTextFunction;
     }
 

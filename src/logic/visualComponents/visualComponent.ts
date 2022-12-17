@@ -7,12 +7,16 @@ export interface VisualComponentContructorOptions{
 	noRenderOnCreate?: boolean,
 }
 
+/**
+ * New visual components are automatically added
+ * into the render list.
+ */
 export class VisualComponent{
 
 	static components: VisualComponent[] = [];
 
 	private _id: string;
-	private _allowRender: boolean = true;
+	public allowRender: boolean = true;
 	
 	public destoryOnNextCycle: boolean = false;
 	public text: Function;
@@ -22,12 +26,16 @@ export class VisualComponent{
 		this._id = Generate.objectId();
 		this.label = options.label;
 		this.text= options.text ?? (() => "");
-		this.destoryOnNextCycle = options.destoryOnNextCycle ?? false;
+		if(options.destoryOnNextCycle !== undefined)
+			this.destoryOnNextCycle = options.destoryOnNextCycle;
+		if(options.noRenderOnCreate !== undefined && options.noRenderOnCreate)
+			this.allowRender = false;
 		VisualComponent.components.push(this);
 	}
 	
-	static renderAll(){
+	static render(){
 		for(let i = 0; i < VisualComponent.components.length; i++){
+			if(VisualComponent.components[i].allowRender === false) continue;
 			console.log(VisualComponent.components[i].text())
 			if(VisualComponent.components[i].destoryOnNextCycle){
 				VisualComponent.components.splice(i,1);
@@ -35,11 +43,43 @@ export class VisualComponent{
 			}
 		}
 	}
-
-	static rearrangeComponents(labels:string[]){
-		const tmp = new Array(labels.length);
+	/**
+	 * Allow the sorted components component to be render by default.
+	 * Disable render for all other component to be render by default.
+	 * @param labels 
+	 */
+	static sortComponent(labels:string[]){
+		const inputLabels: (string | VisualComponent)[] = [...labels];
 		for(let i = 0; i < VisualComponent.components.length; i++){
-			//if(includes(VisualComponent.components[i].label))
+			let found: boolean = false;
+			VisualComponent.components[i].allowRender = false;
+			for(let j = 0; j<inputLabels.length; j++){
+				if(VisualComponent.components[i].label === inputLabels[j]){
+					VisualComponent.components[i].allowRender = true;
+					inputLabels[j] = VisualComponent.components[i];
+					found = true;
+					break;
+				}
+			}
+			if(found) continue;
+			inputLabels.push(VisualComponent.components[i]);
+		}
+		VisualComponent.components = inputLabels as VisualComponent[];
+	}
+	
+	/**
+	 * Show all selected components
+	 * Can pass options to auto hide all others
+	 * @param labels 
+	 */
+	static show(labels:string[], hideOther: boolean = false){
+		for(let i = 0; i < VisualComponent.components.length; i++){
+			if(labels.includes(VisualComponent.components[i].label)){
+				VisualComponent.components[i].allowRender = true;
+			}
+			else if(hideOther){
+				VisualComponent.components[i].allowRender = false;
+			}
 		}
 	}
 }
