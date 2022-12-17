@@ -1,5 +1,6 @@
-import { PlantEntitity } from "./plant_entitity";
+import { PlantEntitity } from "../../plantEntitity";
 import { Generate } from "cerceis-lib";
+import { VisualComponent, VisualComponentContructorOptions } from "../visualComponent";
 
 interface GardenPlot {
     text: string,
@@ -7,17 +8,21 @@ interface GardenPlot {
     entity: PlantEntitity | null
 }
 
-export class Garden{
-    private _id: string;
+export interface GardenVisualComponentContructorOptions extends VisualComponentContructorOptions{
+	name: string,
+	size: number
+}
+
+export class Garden extends VisualComponent{
     private _grid: GardenPlot[][] = [];
     private _name: string;
     
-    constructor(name: string, size: number){
-        this._id = Generate.objectId();
-        this._name = name;
-        for(let row = 0; row < size; row++){
+    constructor(options: GardenVisualComponentContructorOptions){
+		super(options);
+        this._name = options.name;
+        for(let row = 0; row < options.size; row++){
             const tmpRow: GardenPlot[] = [];
-            for(let cell = 0; cell < size; cell++){
+            for(let cell = 0; cell < options.size; cell++){
                 tmpRow.push({
                     text: "[  ]",
                     fertilizer: false,
@@ -26,9 +31,10 @@ export class Garden{
             }
             this._grid.push(tmpRow);
         }
+		this.text = this._gardenTextFunction;
     }
 
-    get text(){
+    private _gardenTextFunction(){
         let textString = "    ";
         // Add top label;
         for(let i = 0; i < this._grid[0].length; i++) textString += ` ${i}  `;
