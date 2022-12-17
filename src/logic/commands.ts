@@ -35,6 +35,7 @@ export const applyCommands = (input: string[]) => {
 		input[1] === "hire" &&
 		input[2] === "help"
 	){
+		// TODO: Fix the cost
 		const cost: number = 1000;
 		if(user.gold < cost)
 			quickText(`You have not enough gold. ( ${user.gold} G )`);
