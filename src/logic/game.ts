@@ -1,13 +1,12 @@
 import { Delay } from "cerceis-lib";
 import { createInterface } from "readline";
-import { VisualComponent } from "./visualComponents/visualComponent";
+import { VisualComponent } from "./visualComponent";
 import { applyCommands } from "./commands";
-
-const rl = createInterface({input: process.stdin, output: process.stdout});
 
 export class Game{
     static _awaitingCmd: boolean = false;
     static _input: string[] = [];
+    static _previousInput: string[] = [];
 
     private _refreshRate: number;
     
@@ -21,13 +20,23 @@ export class Game{
 
     public async startRenderingCycle(){
         const _renderFunc = async() => {
-			console.clear()
+            process.stdout.write('\u001b[3J\u001b[1J');
+            console.clear()
 			VisualComponent.render();	
             Game._awaitingCmd = true;
             if(Game._awaitingCmd){
+                const rl = createInterface({input: process.stdin, output: process.stdout});
+                // Game cycle is 1 minutes.
+                // But timeout to force rerender is
+                const renderTimeOut = setTimeout(() => {
+                    Game._awaitingCmd = false;
+                    rl.close();
+                }, 1000 * 60 * 4) // 4 minutes 
                 rl.question(`[help:?]: `, (c) => {
                     Game._input = this._parseInput(c);
                     Game._awaitingCmd = false;
+                    clearTimeout(renderTimeOut);
+                    rl.close();
                 })
             }
         }

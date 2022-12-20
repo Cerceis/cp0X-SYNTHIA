@@ -1,10 +1,8 @@
 What is this game about ?
 This is a console-text based farming game.
 
-
-
 Genetic modifications:
-Each unique plant has a basic gene list of length 20;
+Each unique plant has a basic gene list of length 40;
 Example: An apple tree
 Gene: "MMMMMYYYYYGGMMM00000"
 
@@ -27,4 +25,3 @@ Green: Ready to harvest.
 
 [░░] : Plowed
 [  ] : Soil
-[░░] : Yellow -> Fertilizer added

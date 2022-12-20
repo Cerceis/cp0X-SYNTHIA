@@ -1,5 +1,5 @@
 import { VisualComponent } from "../visualComponent";
-
+import { Generate } from "cerceis-lib";
 /**
  * To print something fast.
  * quickText will always destroy on next cycle.
@@ -8,8 +8,8 @@ import { VisualComponent } from "../visualComponent";
  */
 export const quickText = (str: string) => {
 	return new VisualComponent({
-		label: "quickText",
-		text:() => str,
+		label: Generate.objectId(),
+		text:() => `${str}\nPress enter to continue. Or load more.`,
 		destoryOnNextCycle: true
 	})
 }

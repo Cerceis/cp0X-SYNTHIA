@@ -4,6 +4,7 @@ export interface VisualComponentContructorOptions{
 	label: string,
 	text?: Function,
 	destoryOnNextCycle?: boolean,
+    hideOnNextCycle?: boolean,
 	noRenderOnCreate?: boolean,
 }
 
@@ -19,6 +20,7 @@ export class VisualComponent{
 	public allowRender: boolean = true;
 	
 	public destoryOnNextCycle: boolean = false;
+    public hideOnNextCycle: boolean = false; // ?? still in experiment.
 	public text: Function;
 	public label: string;
 
@@ -28,6 +30,8 @@ export class VisualComponent{
 		this.text= options.text ?? (() => "");
 		if(options.destoryOnNextCycle !== undefined)
 			this.destoryOnNextCycle = options.destoryOnNextCycle;
+        if(options.hideOnNextCycle !== undefined)
+			this.hideOnNextCycle = options.hideOnNextCycle;
 		if(options.noRenderOnCreate !== undefined && options.noRenderOnCreate)
 			this.allowRender = false;
 		VisualComponent.components.push(this);
@@ -39,6 +43,10 @@ export class VisualComponent{
 			console.log(VisualComponent.components[i].text())
 			if(VisualComponent.components[i].destoryOnNextCycle){
 				VisualComponent.components.splice(i,1);
+				return;
+			}
+            if(VisualComponent.components[i].hideOnNextCycle){
+				VisualComponent.components[i].allowRender = false;
 				return;
 			}
 		}
