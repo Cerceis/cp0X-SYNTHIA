@@ -50,7 +50,7 @@ export class Shop extends VisualComponent{
     };
 
     private _greetings(): string{
-        let greetings = "Welcome to SYNTHIA shop! Here is a list of available items\n";
+        let greetings = "Welcome to SYNTHIA's shop! Here is a list of available items\n";
         greetings += "Shop inventory refreshes every 15 days(1 Hour), so remember to check out regularly!\n";
         greetings += `Last update: ${this._lastInventoryUpdate}\n\n`;
         return greetings;

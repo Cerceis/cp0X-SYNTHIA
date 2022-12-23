@@ -33,7 +33,7 @@ export const comGarden = new Garden({
 export const genNewHelper = () => {
     return new VisualComponent({
         label: "commandHelper",
-        text: () => stringAutoSpacer(commandList, " "),
+        text: () => stringAutoSpacer(commandList(), " "),
         destoryOnNextCycle: true,
     });
 }

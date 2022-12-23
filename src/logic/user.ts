@@ -76,8 +76,9 @@ export class User extends VisualComponent{
             if(item.entity.matured){
                 matured.push(item);
                 continue;
-            } // TODO: Show temperature here.
+            }
             list += `${item.id}: ${item.entity.name}(${item.entity.symbol}) x${item.count}\n`;
+            list += `: Growth temperature ${item.entity.tempLow}°C ~ ${item.entity.tempHigh}°C\n`;
             list += `: Cost ${item.entity.cost} G each. Sell value ${item.entity.value} G each. Profit ${item.entity.value - item.entity.cost} G each.\n`;
             list += `: Yield ${item.entity.yield} per harvest. Takes ${hoursToReadable(item.entity.growth)} to grow.\n`;
             list += `: Expected profit per harvest = ${ item.entity.yield * (item.entity.value - item.entity.cost)} G\n`

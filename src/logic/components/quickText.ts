@@ -9,7 +9,7 @@ import { Generate } from "cerceis-lib";
 export const quickText = (str: string) => {
 	return new VisualComponent({
 		label: Generate.objectId(),
-		text:() => `${str}\nPress enter to continue. Or load more.`,
+		text:() => `${str}`,
 		destoryOnNextCycle: true
 	})
 }

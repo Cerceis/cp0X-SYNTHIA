@@ -17,6 +17,7 @@ export class VisualComponent{
 	static components: VisualComponent[] = [];
 
 	private _id: string;
+    get id(): string{return this._id};
 	public allowRender: boolean = true;
 	
 	public destoryOnNextCycle: boolean = false;
@@ -38,19 +39,31 @@ export class VisualComponent{
 	}
 	
 	static render(){
+        const removeQueue: string[] = [];
 		for(let i = 0; i < VisualComponent.components.length; i++){
+            if(!VisualComponent.components[i]) continue;
 			if(VisualComponent.components[i].allowRender === false) continue;
 			console.log(VisualComponent.components[i].text())
 			if(VisualComponent.components[i].destoryOnNextCycle){
-				VisualComponent.components.splice(i,1);
-				return;
+                removeQueue.push(VisualComponent.components[i].id);
+				continue;
 			}
             if(VisualComponent.components[i].hideOnNextCycle){
 				VisualComponent.components[i].allowRender = false;
-				return;
+				continue;
 			}
 		}
+        for(let i = 0; i < removeQueue.length; i++)
+            VisualComponent.destory(removeQueue[i]);
 	}
+    static destory(id: string){
+        for(let i = 0; i < VisualComponent.components.length; i++){
+            if(VisualComponent.components[i].id === id){
+				VisualComponent.components.splice(i,1);
+				return;
+			}
+        }
+    }
 	/**
 	 * Allow the sorted components component to be render by default.
 	 * Disable render for all other component to be render by default.

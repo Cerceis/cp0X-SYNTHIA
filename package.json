@@ -1,17 +1,17 @@
 {
-  "name": "cp0x-synthia",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "nodemon ./index.ts"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "cerceis-lib": "^2.1.10",
-    "nodemon": "^2.0.20",
-    "ts-node": "^10.9.1"
-  }
+    "name": "cp0x-synthia",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.ts",
+    "scripts": {
+        "dev": "nodemon ./index.ts"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "cerceis-lib": "^2.1.10",
+        "nodemon": "^2.0.20",
+        "ts-node": "^10.9.1"
+    }
 }

@@ -51,14 +51,27 @@ export class Garden extends VisualComponent{
             for(let cell = 0; cell < this._grid[row].length; cell++){
                 const t = this._grid[row][cell].entity;
                 if(t){
-                    // Color the border depends on humidity
-                    let color: Color = "Cyan";
-                    if(t.humidity >= 70 && t.humidity <= 80) color = "Green";
-                    if(t.humidity >= 50 && t.humidity <= 60) color = "Yellow";
-                    if(t.humidity >= 30 && t.humidity <= 40) color = "Brown";
-                    if(t.humidity >= 0 && t.humidity <= 20) color = "Red";
-                    if(t.matured) color = "White";
-                    textString += `${colorString("[", color)}(${this._grid[row][cell].entity?.symbolColored})${colorString("]", color)} `;
+                    // Color the border [] depends on humidity
+                    let humidityColor: Color = "Cyan";
+                    if(t.humidity >= 63 && t.humidity <= 83) humidityColor = "Green";
+                    if(t.humidity >= 42 && t.humidity <= 62) humidityColor = "Yellow";
+                    if(t.humidity >= 21 && t.humidity <= 41) humidityColor = "Brown";
+                    if(t.humidity >= 0 && t.humidity <= 20) humidityColor = "Red";
+                    if(t.matured) humidityColor = "White";
+                    // Color the border () depends on growth rate
+                    let growthRateColor: Color = "Cyan";
+                    const growthRatePercentage: number = t.growthRate * 100;
+                    if(growthRatePercentage >= 63 && growthRatePercentage <= 83) growthRateColor = "Green";
+                    if(growthRatePercentage >= 42 && growthRatePercentage <= 62) growthRateColor = "Yellow";
+                    if(growthRatePercentage >= 21 && growthRatePercentage <= 41) growthRateColor = "Brown";
+                    if(growthRatePercentage >= 0 && growthRatePercentage <= 20) growthRateColor = "Red";
+                    if(t.matured) growthRateColor = "White";
+
+                    textString += `${colorString("[", humidityColor)}`;
+                    textString += `${colorString("(", growthRateColor)}`;
+                    textString += `${this._grid[row][cell].entity?.symbolColored}`;
+                    textString += `${colorString(")", growthRateColor)}`;
+                    textString += `${colorString("]", humidityColor)} `;
                 }else textString += `${this._grid[row][cell].text} `;
             }
             textString += `\n\n`;
@@ -68,13 +81,70 @@ export class Garden extends VisualComponent{
 
     public plow(row: number, col: number, noMessage: boolean = false): boolean{
         if(!this._grid || !this._grid[row] || !this._grid[row][col]){
-            quickText(`Cannot find coordinates (${row}, ${col}).`)
+            if(!noMessage) quickText(`Cannot find coordinates (${row}, ${col}).`)
             return false;
         }
         this._grid[row][col].text = "[(░░)]";
         this._grid[row][col].plowed = true;
         if(!noMessage) quickText(`Plowed (${row}, ${col}).`)
         return true;
+    }
+
+    /**
+     * 10 G per plot needed to plow;
+     * @returns 
+     */
+    public checkAutoPlowCost(): number{
+        let cost = 0;
+        for(let row = 0; row < this._grid.length; row++){
+            for(let cell = 0; cell < this._grid[row].length; cell++){
+                if(this._grid[row][cell].entity || this._grid[row][cell].plowed) continue;
+                cost += 10;
+            }
+        }   
+        return cost;
+    }
+    
+    /**
+     * 2 G per plot needed to water;
+     * @returns 
+     */
+    public checkAutoWaterCost(): number{
+        let cost = 0;
+        for(let row = 0; row < this._grid.length; row++){
+            for(let cell = 0; cell < this._grid[row].length; cell++){
+                if(!this._grid[row][cell].entity) continue;
+                if(this._grid[row][cell].entity && this._grid[row][cell].entity?.humidity === 100) continue;
+                cost += 2;
+            }
+        }   
+        return cost;
+    }
+
+    /**
+     * 10 G per plot needed to harvest;
+     * @returns 
+     */
+    public checkAutoHarvestCost(): number{
+        let cost = 0;
+        for(let row = 0; row < this._grid.length; row++){
+            for(let cell = 0; cell < this._grid[row].length; cell++){
+                if(!this._grid[row][cell].entity) continue;
+                if(!this._grid[row][cell].entity?.matured) continue;
+                cost += 10;
+            }
+        }   
+        return cost;
+    }
+
+    public auto(job: "plow" | "water" | "harvest"){
+        for(let row = 0; row < this._grid.length; row++){
+            for(let cell = 0; cell < this._grid[row].length; cell++){
+                if(job === "plow") this.plow(row, cell, true);
+                if(job === "water") this.water(row, cell, true);
+                if(job === "harvest") this.harvest(row, cell, true);
+            }
+        }   
     }
 
     public plant(entity: PlantEntity, row: number, col: number): boolean{
@@ -155,18 +225,18 @@ export class Garden extends VisualComponent{
         quickText(text);
     }
 
-    public harvest(row: number, col: number): boolean | PlantEntity{
+    public harvest(row: number, col: number, noMessage: boolean = false): boolean | PlantEntity{
         if(!this._grid || !this._grid[row] || !this._grid[row][col]){
-            quickText(`Cannot find coordinates (${row}, ${col}).`);
+            if(!noMessage) quickText(`Cannot find coordinates (${row}, ${col}).`);
             return false;
         }
         const target = this._grid[row][col].entity;
         if(!target){
-            quickText(`No plant found in coordinates (${row}, ${col}).`);
+            if(!noMessage) quickText(`No plant found in coordinates (${row}, ${col}).`);
             return false;
         }
         if(!target.matured){
-            quickText(`The plant is not ready to be harvest (${row}, ${col}).`);
+            if(!noMessage) quickText(`The plant is not ready to be harvest (${row}, ${col}).`);
             return false;
         }
         this._grid[row][col].text = "([  ])";
@@ -175,17 +245,17 @@ export class Garden extends VisualComponent{
         return target;
     }
 
-    public water(row: number, col: number){
+    public water(row: number, col: number, noMessage: boolean = false){
         if(!this._grid || !this._grid[row] || !this._grid[row][col]){
-            quickText(`Cannot find coordinates (${row}, ${col}).`);
+            if(!noMessage) quickText(`Cannot find coordinates (${row}, ${col}).`);
             return false;
         }
         const target = this._grid[row][col].entity;
         if(!target){
-            quickText(`No plant found in coordinates (${row}, ${col}).`);
+            if(!noMessage) quickText(`No plant found in coordinates (${row}, ${col}).`);
             return false;
         }
-        quickText(`Watered (${row}, ${col}).`);
+        if(!noMessage) quickText(`Watered (${row}, ${col}).`);
         target.humidity = 100;
     }
 

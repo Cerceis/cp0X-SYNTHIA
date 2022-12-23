@@ -47,11 +47,12 @@ export class PlantEntity{
         const finalValue = Number((this._humidity/100 - temperaturePenalty).toFixed(2));
         return  finalValue > 0 ? finalValue : 0;
     };
+    // 0 ~ 20, 21 ~ 41, 42 ~ 62, 63 ~ 83, 84 ~ 100 
     get symbolColored(){ 
         let color: Color = "Cyan";
-        if(this.health >= 70 && this.health <= 80) color = "Green";
-        if(this.health >= 50 && this.health <= 60) color = "Yellow";
-        if(this.health >= 30 && this.health <= 40) color = "Brown";
+        if(this.health >= 63 && this.health <= 83) color = "Green";
+        if(this.health >= 42 && this.health <= 62) color = "Yellow";
+        if(this.health >= 21 && this.health <= 41) color = "Brown";
         if(this.health >= 0 && this.health <= 20) color = "Red";
         if(this.matured) color = "White";
         return colorString(this.symbol, color);
