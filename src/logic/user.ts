@@ -120,7 +120,6 @@ export class User extends VisualComponent{
                 count: parsedData[i].count,
                 entity: PlantEntity.load(parsedData[i].entity),
             })
-            
         }
         this._bag = tmpBag;
     }

@@ -1,5 +1,6 @@
 import { writeFileSync, readFileSync, existsSync } from "fs";
 import { user, comShop, comGarden, comTime } from "./components";
+import { Genetics } from "./genetics";
 import { quickText } from "./components/quickText";
 import { Obfuscator } from "cerceis-lib";
 
@@ -14,6 +15,7 @@ interface SavedFile{
     shop: string,
     garden: string,
     time: string,
+	genetic: string
 }
 /**
  * Things to save
@@ -28,6 +30,7 @@ export const save = (isAuto: boolean = false) => {
         shop: comShop.save(),
         garden: comGarden.save(),
         time: comTime.save(),
+		genetic: Genetics.save(),
     }
     writeFileSync(savePath, obsMachine.obfuscatev3(JSON.stringify(saveObj), WHATYOULOOKINAT));
     if(isAuto)
@@ -47,5 +50,6 @@ export const load = () => {
     comShop.load(savedData.shop);
     comGarden.load(savedData.garden);
     comTime.load(savedData.time);
+	Genetics.load(savedData.genetic);
     quickText("Load successful!");
 }
