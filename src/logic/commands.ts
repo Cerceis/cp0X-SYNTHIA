@@ -5,7 +5,7 @@ import {
 	comGarden, genNewHelper, comTime,
     comShop, user
 } from "./components";
-import { save, load } from "./system";
+import { save, load, saveOptions } from "./system";
 import { PlantEntity } from "./components/plantEntity";
 import { colorString } from "../functions/gene";
 
@@ -13,6 +13,7 @@ export const commandList = () => `
 === ${colorString("General", "Green")}  =============================================
 ?: Show list of commands.
 save: Save game.
+save set [name]: Set autosave and future save to specific filename (Currently "${saveOptions.filename}").
 load: Load game.
 weather report: Show weather report.
 
@@ -208,6 +209,19 @@ export const applyCommands = (cmd: string[], noRecord: boolean = false): any => 
             if(cmdCheck(preCmd, ["bag"])) repeatPrevious = true;
         }
         // Shop END
+
+        // Genetics
+        if(cmdCheck(cmd, ["extract", "any"])){
+            const targetItemId: string = cmd[1];
+            const targetCount: number = Number(1);
+            const targetItem = user.getItemById(targetItemId);
+            if(!targetItem){
+                quickText(`Item not found, ID:${targetItemId}`)
+                throw new Error();
+            }
+        
+        }
+        // Genetics END
 
         if(cmdCheck(cmd, ["debug"])){
             quickText("0w0")
