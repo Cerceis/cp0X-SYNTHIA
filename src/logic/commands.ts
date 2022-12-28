@@ -53,6 +53,7 @@ extract [id]: Extract gene from a seed/harvested plant
 extractors: Show list of extractors.
 `;
 
+
 export const learnString: {[key: string]: string} = {
 garden: `
 Garden is where you plant your sutff, duh.

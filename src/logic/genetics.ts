@@ -17,6 +17,7 @@ import { FromArray } from "cerceis-lib";
     "I": { weight: 3, color: "Pink" }, // Immunity: Immunity from plant based deceases.
     "D": { weight: 3, color: "Brown" }, // Durability: Higher = Better protection from bug infectation, lesser loss during harvest.
     "0": { weight: 10, 
+		
  */
 class Extractor{
 	private _ms: number;
