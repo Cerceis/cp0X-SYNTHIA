@@ -3,9 +3,16 @@ import { user, comShop, comGarden, comTime } from "./components";
 import { quickText } from "./components/quickText";
 import { Obfuscator } from "cerceis-lib";
 
-// TODO: allow multiple saves.
-//export let filename: string = 
-const savePath: string = "./.savedFile.synthia";
+export interface SaveOptions{
+    filename: string,
+    autoSave: boolean,
+    baseDir: string,
+}
+export const saveOptions: SaveOptions = {
+    filename: "autoSave",
+    autoSave: true,
+    baseDir: "./saves/"
+};
 const WHATYOULOOKINAT = "WHATYOULOOKINAT"
 const obsMachine = new Obfuscator();
 
@@ -29,6 +36,7 @@ export const save = (isAuto: boolean = false) => {
         garden: comGarden.save(),
         time: comTime.save(),
     }
+    const savePath: string = `${saveOptions.baseDir}${saveOptions.filename}.synthia`;
     writeFileSync(savePath, obsMachine.obfuscatev3(JSON.stringify(saveObj), WHATYOULOOKINAT));
     if(isAuto)
         quickText(`Auto saved! ${comTime.time}`);
@@ -36,13 +44,13 @@ export const save = (isAuto: boolean = false) => {
         quickText(`File saved! ${comTime.time}`);
 }
 
-
-export const load = () => {
-    if(!existsSync(savePath)){
+export const load = (filename: string = "autoSave") => {
+    const loadPath: string = `${saveOptions.baseDir}${filename}.synthia`;
+    if(!existsSync(loadPath)){
         quickText("No save file found!");
         return;
     }
-    const savedData = JSON.parse(obsMachine.deobfuscatev3(readFileSync(savePath).toString(), WHATYOULOOKINAT));
+    const savedData = JSON.parse(obsMachine.deobfuscatev3(readFileSync(loadPath).toString(), WHATYOULOOKINAT));
     user.load(savedData.user);
     comShop.load(savedData.shop);
     comGarden.load(savedData.garden);
