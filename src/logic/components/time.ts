@@ -181,7 +181,9 @@ export class TimeController extends VisualComponent{
 
     public save(){
         this._interval = null;
-        return JSON.stringify(this);
+		const result = JSON.stringify(this);
+		this._startTime();
+        return result;
     }
 
     public load(stringData: string){

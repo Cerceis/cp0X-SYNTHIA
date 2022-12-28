@@ -8,6 +8,7 @@ import {
 import { save, load, saveOptions } from "./system";
 import { PlantEntity } from "./components/plantEntity";
 import { colorString } from "../functions/gene";
+import { Genetics } from "./genetics";
 
 export const commandList = () => `
 === ${colorString("General", "Green")}  =============================================
@@ -48,7 +49,11 @@ sell [id] [amount]: Sell item (id is the id in your bag).
 === ${colorString("Genetics", "Green")} =============================================
 learn genetic: Check this out if you want to learn more about Genetics.
 gene: Show a quick reference of all genes.
+extract [id]: Extract gene from a seed/harvested plant
+: (id is the id in your bag).
+extractors: Show list of extractors.
 `;
+
 
 export const learnString: {[key: string]: string} = {
 garden: `
@@ -210,18 +215,22 @@ export const applyCommands = (cmd: string[], noRecord: boolean = false): any => 
         }
         // Shop END
 
-        // Genetics
-        if(cmdCheck(cmd, ["extract", "any"])){
-            const targetItemId: string = cmd[1];
-            const targetCount: number = Number(1);
+		// Genetics
+		if(cmdCheck(cmd, ["extract", "any"])){
+			const targetItemId: string = cmd[1];
+            const targetCount: number = 1;
             const targetItem = user.getItemById(targetItemId);
             if(!targetItem){
                 quickText(`Item not found, ID:${targetItemId}`)
                 throw new Error();
             }
-        
+			Genetics.extract(targetItem.entity.genes);
+			user.removeItemByCount(targetItemId, targetCount);
+			quickText(`${targetItem.entity.name} placed into extractor.`)
         }
-        // Genetics END
+
+
+		// Genetics END
 
         if(cmdCheck(cmd, ["debug"])){
             quickText("0w0")
